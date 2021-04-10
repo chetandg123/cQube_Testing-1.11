@@ -34,11 +34,18 @@ class Data():
     Dashboard = "menu"
     header = "//h4"
     # Data Replay
+    hamburger_menu_id = "menu"
+    data_replay_hamburger_icon = "dataReplay"
     data_replay_icon_id = "replay"
     data_source_select_box_id = "dataSources"
     data_replay_submit_button_css_selector = "div > button:first-of-type"
     data_replay_cancel_button_css_selector = "div > button:last-of-type"
     data_replay_select_year_class = "time"
+    data_replay_from_date_xpath = "//div[1]/input"
+    data_replay_to_date_xpath = "//div[2]/input"
+    data_replay_multi_select_button ="//app-multi-select/div/div/button"
+    data_replay_multi_select_button_list ='//*[@id="div1"]/label/span'
+
     # school_infra_Report
     # school_infra = "si"
     infro_dist = "//select[@name='myDistrict']/option"

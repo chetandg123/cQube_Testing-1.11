@@ -675,14 +675,28 @@ class GetData():
         config.read(self.p.get_config_ini_path())
         return config['config']['database']
 
-    def get_table_data_count(self,query,con):
+    def get_table_data_count(self,table_name):
+        cal = GetData()
+        con = cal.connect_to_postgres()
         cursor = con.cursor()
+        query = "select * from "+ table_name
         cursor.execute(query)
         count = cursor.fetchall()
-        return count
+        cursor.close()
+        con.close()
+        return len(count)
+
 
 
     # admin console data replay
+    def click_humburger_menu(self):
+        self.driver.find_element_by_id(Data.hamburger_menu_id).click()
+
+    def click_humburger_data_replay_icon(self):
+        self.driver.find_element_by_id(Data.data_replay_hamburger_icon).click()
+
+    def click_on_home(self):
+        self.driver.find_element_by_id(Data.home).click()
 
     def click_data_replay(self, driver):
         self.driver = driver
@@ -693,10 +707,88 @@ class GetData():
         select =Select(self.driver.find_element_by_id(Data.data_source_select_box_id))
         select.select_by_visible_text(data_source_name)
 
+    def check_data_source_message_on_select_box(self):
+        select = Select(self.driver.find_element_by_id(Data.data_source_select_box_id))
+        return select.first_selected_option
+
     def select_data_replay_year(self,driver,year):
         self.driver =driver
         select = Select(self.driver.find_element_by_class_name(Data.data_replay_select_year_class))
         select.select_by_visible_text(year)
+
+    def click_data_replay_submit_button(self,driver):
+        self.driver = driver
+        self.driver.find_element_by_css_selector(Data.data_replay_submit_button_css_selector).click()
+
+    def click_ok_on_alertbox(self,driver):
+        self.driver = driver
+        alert = self.driver.switch_to.alert
+        alert.accept()
+
+    def pass_from_date_to_diksha_etb_(self,driver):
+        self.driver = driver
+        from_date = self.driver.find_element_by_xpath(Data.data_replay_from_date_xpath)
+        from_date.clear()
+        from_date.click()
+        cal = GetData()
+        from_date.send_keys(cal.get_diksha_etb_from_date())
+        cal.click_data_replay_submit_button(self.driver)
+        cal.click_ok_on_alertbox(self.driver)
+
+    def pass_to_date_to_diksha_etb_(self,driver):
+        self.driver = driver
+        from_date = self.driver.find_element_by_xpath(Data.data_replay_to_date_xpath)
+        from_date.clear()
+        cal = GetData()
+        from_date.send_keys(cal.get_diksha_etb_to_date())
+
+    def click_multi_select_button(self):
+        return  self.driver.find_element_by_xpath(Data.data_replay_multi_select_button)
+
+    def select_multi_option_button(self):
+        return self.driver.find_element_by_xpath(Data.data_replay_multi_select_button_list)
+
+    def get_crc_year(self):
+        config = configparser.ConfigParser()
+        config.read(self.p.get_config_ini_path())
+        return config['data_replay']['crc']
+
+    def get_crc_month(self,month_selected):
+        month = ['January','February','March','April','May','June','July','August','September','October','November','December']
+        month_nor = 0
+        for x in range(0, len(month)):
+            if month_selected == month[x]:
+                month_nor = x+1
+                break
+        return month_nor
+
+    def get_diksha_etb_from_date(self):
+        config = configparser.ConfigParser()
+        config.read(self.p.get_config_ini_path())
+        return config['data_replay']['diksha_etb_from_date']
+
+    def get_diksha_etb_to_date(self):
+        config = configparser.ConfigParser()
+        config.read(self.p.get_config_ini_path())
+        return config['data_replay']['diksha_etb_to_date']
+
+    def get_student_attendance_year(self):
+        config = configparser.ConfigParser()
+        config.read(self.p.get_config_ini_path())
+        return config['data_replay']['student_attendance_year']
+
+    def get_teacher_attendance_year(self):
+        config = configparser.ConfigParser()
+        config.read(self.p.get_config_ini_path())
+        return config['data_replay']['teacher_attendance_year']
+
+    def get_semester_academic_year(self):
+        config = configparser.ConfigParser()
+        config.read(self.p.get_config_ini_path())
+        return config['data_replay']['semester_academic_year']
+
+
+
 
 
 
